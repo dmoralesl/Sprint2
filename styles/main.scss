@@ -1,0 +1,284 @@
+// Colors personalitzats
+$primary: #5265E1;
+$secondary: #FA5959;
+$font-size-base: .8rem; 
+$accordion-button-icon: url("/public/images/icon-arrow.svg");
+$accordion-button-active-icon: url("/public/images/icon-arrow.svg");
+$accordion-icon-width: 1rem;
+$accordion-button-focus-box-shadow: none;
+$input-placeholder-color: rgba(128, 128, 128, 0.432);
+// Formateig del missatge d'error a la validació de formularis
+$form-feedback-icon-invalid: url("/public/images/icon-error.svg");
+$form-feedback-invalid-color: white;
+$form-feedback-font-style: italic;
+$form-feedback-font-size: .5rem;
+$form-feedback-margin-top: 0px;
+
+@import '../bootstrap/scss/bootstrap';
+
+// Variables propies que es creen per a fer ús a diferents llocs de l'arxiu
+$footer-nav-bg-color: #242946;
+
+body {
+    // Utilitzem overflow-clip per controlar el scroll horitzontal
+    overflow-x: clip;
+}
+
+#featuresTabs  {
+
+    .active {
+        border: none;
+        border-bottom: 0.2rem solid $secondary !important;
+    }
+
+    @include media-breakpoint-up(md) {
+        & > li {
+            border-top: none !important;
+        }
+    }
+}
+
+// Estil per al menú quan es fa click en la icona d'hambuguesa (mobile)
+#navbarNav.show {
+    width: 100% !important;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 2rem 2rem 3rem 2rem !important;
+    background-color: rgba($footer-nav-bg-color, .98) !important;
+    flex-direction: column;
+    display: block !important;
+
+    #closeMenu {
+        display: block !important;
+        cursor: pointer;
+    }
+
+    div:first-child {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 2rem;
+
+        // Canviar el logo actual pel blanc
+        img:first-child {
+            display: none;
+        }
+        img:nth-child(2) {
+            display: block !important;
+        }
+    }
+
+    div:last-child {
+        display: flex !important;
+        img {
+            cursor: pointer;
+        }
+    }
+
+    .collapse {
+        display: block !important;
+        margin: auto;
+        text-align: center;
+        width: 100% !important;
+        height: 50vh;
+
+        ul { width: 100% !important; }
+        
+        li:first-child { 
+            border-top: .5px solid rgba($light, .2) !important;            
+        }
+        li {
+            margin-right: 0px !important; 
+            border-bottom: .5px solid rgba($light, .2) !important;
+        }
+
+        a {
+            color: $light;
+            font-size: 1.5rem;
+            font-weight: lighter;
+            padding: 1rem;
+        }
+
+        button {
+            background-color: transparent !important;
+            border: 2px solid $light;
+            border-radius: .3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        span { margin: auto; }
+
+    }
+
+    button {
+        display: none;
+    }
+
+}
+
+
+@each $color, $value in $theme-colors {
+
+    .btn-#{$color} {
+        &:hover {
+            // Invertim els colors amb tots els theme colors menys amb light
+            // ja que el blanc sobre blanc no s'arriba a veure
+            @if $color != light {
+                color: $value !important;
+                border-color: $value;
+            } @else {
+                color: #000 !important;
+                border-color: #000;
+            }
+            background-color: white;
+        }
+    }
+  }
+
+
+.nav-link {
+
+    border: none !important;
+
+    &:hover {
+        color: $secondary !important;
+    }
+}
+ 
+.tab-content {
+    .active {
+        display: flex;
+    }
+}
+
+.card-footer, .card {
+    border-radius: 1rem !important;
+}
+
+#accordionFaq {
+    button {
+        &:hover {
+            color: $secondary;
+        }
+        &:not(.collapsed) {
+            // Eliminem l'estil del botó quan está desplegada la secció
+            background-color: transparent;
+            border-bottom: none;
+            color: black;
+
+            // Canviem el color de la imatge per colapsar el accordion de blava (primary) 
+            // a roja (secondary) quan està desplegat
+            &::after {
+                filter: invert(66%) sepia(35%) saturate(6760%) hue-rotate(325deg) brightness(99%) contrast(98%);
+            }
+        }
+    }
+
+    .accordion-button {
+        &::after {
+            height: .7rem;
+        }
+    }
+
+    // Eliminem el borde de la primera opció de FAQ en mobile, ja que bootstrap no té helper class size per a la classe border
+    @include media-breakpoint-up(md) {
+        .accordion-item:first-child {
+            border-top: none;
+        }
+        // Eliminem el padding dret dels buttons. Amb les classes de BS deuriem fixar a 0 de base i buscar el per defecte de la classe 
+        // accordion-button per poder fixarlo amb la helper class de tamany. Fent-ho ací som més directes i explícits
+        .accordion-button {
+            padding-right: unset;
+        }   
+    }
+}
+
+footer {
+    p {
+        font-family: monospace;
+        letter-spacing: 3px;
+        font-size: .5rem;
+
+        @include media-breakpoint-down(md) {
+            & { font-size: .75rem; }
+        }
+
+    }
+
+    form {
+
+        // Fixar el tamany del botó permet que no es redimensione quan 
+        // surt un missatge de validació de l'input del formulari a la versió desktop
+        @include media-breakpoint-up(md) {
+            button {
+                max-height: 2rem;
+                max-width: 7rem;
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+            }                
+        }
+
+        // Formateig del missatge de feedback de validació de formaulari 
+        // que no s'ha pogut realitzar sobreescrivint les variables de BS
+        // a l'inici del document
+        .invalid-feedback {
+            padding: .2rem .4rem .2rem .4rem;
+            font-weight: 300;
+        }
+    }
+    .was-validated {
+        #emailInput {
+            background-color: $secondary;
+            text-align: left;
+            border-radius: .3rem;
+            border: 2px solid $secondary;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        input {
+            padding: 1rem !important;
+        }
+    }
+
+    nav {
+        background-color: $footer-nav-bg-color;
+        
+        // Redimensió i canvi de color a roig quan es fa hover per als botons de media
+        div:last-child  {
+            img {
+                &:hover {
+                    filter: invert(66%) sepia(35%) saturate(6760%) hue-rotate(325deg) brightness(99%) contrast(98%);
+                }
+                height: auto;
+                width: 7%;
+                cursor: pointer;
+
+                @include media-breakpoint-down(md) {
+                    width: 100%;
+                    padding: .5rem;
+                }
+            }
+        }
+    }
+}
+
+// Nivell 3. Canviar posició de cada element de forma escalable (amb 5 cards funciona igual)
+@include media-breakpoint-up(md) {
+    @for $i from 1 through 3 {
+        #browserExtensions {
+          div:nth-child(#{$i}) {
+              transform: translate(0px, 2rem * $i);
+              margin-bottom: 5rem;
+              border-radius: 1rem;
+            }
+        }
+    }
+}
